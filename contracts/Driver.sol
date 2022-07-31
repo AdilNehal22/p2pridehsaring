@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
+
 contract DriverFactory {
 
   address[] public deployedDrivers;
@@ -18,6 +21,8 @@ contract DriverFactory {
 
 contract Driver {
 
+  using SafeMath for uint256;
+
   //struct for driver definition
   struct Infodriver{
     address engagedRiderAddress;
@@ -26,18 +31,19 @@ contract Driver {
     uint256 numberOfServices;
   }
 
-  enum driverState {
+  enum DriverState {
     RIDE_EMPTY,
     IN_SERVICE,
     DROPPED_PASSENGER,
     GOT_PAYMENT
   }
 
-  event inService(address indexed _passenger, bytes32 indexed driverID, uint256 numOfTokensDecided);
-  driverState constant driverDefaultState = driverState.RIDE_EMPTY;
+  event inService(address indexed _passenger, bytes32 indexed driverID, uint256 numOfTokensDecided, DriverState state);
+  DriverState driverDefaultState = DriverState.RIDE_EMPTY;
   mapping(address => bytes32) public IdToDriver;
 
   //to access the struct data inside a constructor
+  //declaring a new driver/info
   Infodriver private driver;
 
   constructor(address _newDriver){
@@ -45,10 +51,23 @@ contract Driver {
     driver.driverID = keccak256(abi.encodePacked((block.timestamp)**3, _newDriver));
   }
 
-  function createDriverService(address _passenger) public {
-    require(driverState.RIDE_EMPTY == driverDefaultState, "Driver must clear all the services before starting any new one");
-
+  function createDriverService(address _passenger, uint256 _numOfTokensDecided) public {
+    require(DriverState.RIDE_EMPTY == driverDefaultState, "Driver must clear all the services before starting any new one");    
+    driver.engagedRiderAddress = _passenger;
+    driver.numberOfServices = driver.numberOfServices.add(1);
+    driverDefaultState = DriverState.IN_SERVICE;
+    emit inService(_passenger, driver.driverID, _numOfTokensDecided, driverDefaultState);
   }
+
+  function getDriverNumberOfServices() public view returns (uint256){
+    return driver.numberOfServices;
+  }
+
+  
+
+
+
+
 
 
   
