@@ -9,20 +9,18 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { DriverFactory, Driver } from "../typechain-types";
 
 
-let Driver: Driver;
+let driverDep: Driver;
+// let driverfactory: DriverFactory;
 let driverOne: SignerWithAddress;
 let driverTwo: SignerWithAddress;
 let driverThree: SignerWithAddress;
 
 
 describe("main testing of driver", function () {
-  console.log('here again')
-  describe("factory contract creates new driver", async function(){
-    // console.log('helloooooooooooooooooo')
+  it("factory contract creates new driver", async function(){
     [driverOne, driverTwo, driverThree] = await ethers.getSigners();
-    const driverfactory = await ethers.getContractFactory("DriverFactory", driverOne) as DriverFactory;
-    console.log('driverFactory>>>>>>>>>>>>>>>>>>>', driverfactory)
-    // Driver = await driverfactory.deploy()
-
+    const driverfactory = await ethers.getContractFactory("DriverFactory");
+    driverDep = await driverfactory.deploy()
+    console.log(typeof(driverfactory))
   });
 });
