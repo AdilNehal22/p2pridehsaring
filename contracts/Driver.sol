@@ -8,7 +8,7 @@ contract DriverFactory {
 
   address[] public deployedDrivers;
 
-  function createProjectFund() public {
+  function createDrivers() public {
     Driver createNewDriver =  new Driver(msg.sender);
     deployedDrivers.push(address(createNewDriver));
   }
