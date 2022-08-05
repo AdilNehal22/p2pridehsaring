@@ -59,6 +59,10 @@ contract Driver {
     emit inService(_passenger, driver.driverID, _numOfTokensDecided, driverDefaultState);
   }
 
+  function getDriverInfor() public view returns (address, bytes32, uint256){
+    return(driver.driverAddress, driver.driverID, driver.numberOfServices);
+  }
+
   function getDriverNumberOfServices() public view returns (uint256){
     return driver.numberOfServices;
   }
