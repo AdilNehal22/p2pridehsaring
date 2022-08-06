@@ -1,8 +1,3 @@
-const {
-  time,
-  loadFixture,
-} = require("@nomicfoundation/hardhat-network-helpers");
-const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const { expect } = require("chai");
 const { ethers } = require('hardhat');
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
@@ -10,15 +5,16 @@ import { DriverFactory, Driver } from "../typechain-types";
 
 let driverOne: SignerWithAddress;
 let driverTwo: SignerWithAddress;
-let driverThree: SignerWithAddress;
+let passenger: SignerWithAddress;
 let driver: DriverFactory;
 let allDrivers: string[];
 let actualDriverFac: Driver
+let checkZeroRegex = /^0+$/;
 
 describe("main testing of driver", function () {
 
   it("factory contract deploys correctly", async function(){
-    [driverOne, driverTwo, driverThree] = await ethers.getSigners();
+    [driverOne, driverTwo, passenger] = await ethers.getSigners();
     const driverfactory = await ethers.getContractFactory("DriverFactory");
     driver = await driverfactory.deploy();
     await driver.deployed();
@@ -37,8 +33,24 @@ describe("main testing of driver", function () {
   });
 
   it("returns the driver information correctly", async function(){
-    let [driverAddress, driverID, driverNoOfServices] = await actualDriverFac.getDriverInfor();
-    console.log(`Actual driver address: ${driverAddress}, its ID is: ${driverID}, and numberOfServices are: ${driverNoOfServices}`);
+    try {
+      let [driverAddress, engagedPassenger, driverID, driverNoOfServices] = await actualDriverFac.getDriverInfor();
+      let response = `Actual driver address: ${driverAddress}, its ID is: ${driverID}, and numberOfServices are: ${driverNoOfServices} `;
+      if(engagedPassenger.split('x')[1].match(checkZeroRegex)){
+        console.log(response);
+      }
+    } catch (error) {
+      console.log('error while testing', error);
+    }
+  });
+
+  it("driver can make the service", async function(){
+    const service = await actualDriverFac.createDriverService(passenger.address, 3);
+    const reciept: any = await service.wait();
+    let eventName = reciept.events.map((event: any)=>(
+      event.event
+    ));
+    console.log(`events generated: ${eventName}`);
   });
 
 });
