@@ -3,7 +3,6 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-
 contract DriverFactory {
 
   address[] public deployedDrivers;
@@ -39,6 +38,7 @@ contract Driver {
   }
 
   event inService(address indexed _passenger, bytes32 indexed driverID, uint256 numOfTokensDecided, DriverState state);
+  event serviceEnded(address indexed _passenger, bytes32 indexed driverID, uint256 numOfTokensDecided, DriverState state);
   DriverState driverDefaultState = DriverState.RIDE_EMPTY;
   mapping(address => bytes32) public IdToDriver;
 
@@ -63,21 +63,9 @@ contract Driver {
     return(driver.driverAddress, driver.engagedRiderAddress, driver.driverID, driver.numberOfServices);
   }
 
-  function getDriverNumberOfServices() public view returns (uint256){
-    return driver.numberOfServices;
+  function finishedService(bool _isFinished) public {
+
   }
-
-  
-
-
-
-
-
-
-  
-
-
-
 
 }
 
