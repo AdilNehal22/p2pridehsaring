@@ -63,7 +63,7 @@ contract Driver {
     return(driver.driverAddress, driver.engagedRiderAddress, driver.driverID, driver.numberOfServices);
   }
 
-  function finishedService(bool _isFinished) public {
+  function finishedService(bool _isFinished, address _passenger) public {
 
   }
 
