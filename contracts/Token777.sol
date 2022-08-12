@@ -7,9 +7,13 @@ contract Atoken777 is ERC777 {
 
   string public constant tokenName = "TokenFare";
   string public constant tokenSymbol = "P2PRS";
-  uint256 public initialTokenSupply = 250000;
+  uint256 public constant initialTokenSupply = 2500;
 
-  constructor() public ERC777(tokenName,tokenSymbol, new address[](0)){
-    // _mint(account, amount, userData, operatorData);
+  mapping(address => uint256) public holderBalances;
+
+  constructor(bytes memory userData ,address toAssignHere, address[] memory defaultOperators)
+    ERC777(tokenName, tokenSymbol, defaultOperators){
+      _mint(toAssignHere, initialTokenSupply, userData, "");
   }
+  
 } 
