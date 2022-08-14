@@ -2,8 +2,11 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC777/ERC777.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract Atoken777 is ERC777 {
+
+  using SafeMath for uint256;
 
   string public constant tokenName = "TokenFare";
   string public constant tokenSymbol = "P2PRS";
@@ -24,14 +27,10 @@ contract Atoken777 is ERC777 {
       _mint(address(this), initialTokenSupply, "transfered to contract", "");  
     }
 
-  function sendToDriverUponReg(address _driver, bytes userData) public {
-    require(riderDriverDefaultTransfer == TranferState.FIRST_REGISTRATION, "Free tokens will be given only on first registration");
-    _send(address(this), _driver, firstEqualTranfer, userData, "", requireReceptionAck);
-
-  }
-
-  function sendToRiderUponReg(address _rider) public {
-
+  function sendToDriverUponReg(address _assignHere, bytes memory userData) public {
+    require(riderDriverDefaultTransfer == TranferState.FIRST_REGISTRATION, "Free tokens will be given only on first registration");    
+    transferInformation[_assignHere] = userData;
+    _send(address(this), _assignHere, firstEqualTranfer, userData, "", true);
   }
   
 } 
