@@ -27,10 +27,11 @@ contract Atoken777 is ERC777 {
       _mint(address(this), initialTokenSupply, "transfered to contract", "");  
     }
 
-  function sendToDriverUponReg(address _assignHere, bytes memory userData) public {
+  function sendToDriverRiderUponReg(address _assignHere, bytes memory userData) public {
     require(riderDriverDefaultTransfer == TranferState.FIRST_REGISTRATION, "Free tokens will be given only on first registration");    
     transferInformation[_assignHere] = userData;
+    riderDriverDefaultTransfer = TranferState.TRANFERED_ON_FIRST_REG;
     _send(address(this), _assignHere, firstEqualTranfer, userData, "", true);
   }
-  
+
 } 
