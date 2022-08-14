@@ -2,6 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC777/IERC777.sol";
 
 contract DriverFactory {
 
@@ -30,6 +31,8 @@ contract Driver {
     uint256 numberOfServices;
   }
 
+  address payable tokenAddress;
+
   enum DriverState {
     RIDE_EMPTY,
     IN_SERVICE,
@@ -49,6 +52,7 @@ contract Driver {
   constructor(address _newDriver){
     driver.driverAddress = _newDriver;
     driver.driverID = keccak256(abi.encodePacked((block.timestamp)**3, _newDriver));
+    // IERC777(tokenAddress). ;
   }
 
   function createDriverService(address _passenger, uint256 _numOfTokensDecided) public {
