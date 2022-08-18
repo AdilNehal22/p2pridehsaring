@@ -3,6 +3,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC777/IERC777.sol";
+import "@openzeppelin/contracts/token/ERC777/IERC777Recipient.sol";
 
 contract DriverFactory {
 
@@ -19,7 +20,7 @@ contract DriverFactory {
 
 }
 
-contract Driver {
+contract Driver is IERC777Recipient {
 
   using SafeMath for uint256;
 
